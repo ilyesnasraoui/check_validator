@@ -13,7 +13,7 @@ myfunction = async()=>{var path = (window.URL || window.webkitURL).createObjectU
 
 const dataToSend = formData;
 let dataReceived = ""; 
-const res= await fetch("http://127.0.0.1:8000/test", {
+const res= await fetch("http://3.93.59.211:8000/test", {
     method: "POST",
    
     //headers: { "Content-Type": "multipart/form-data" },
@@ -39,5 +39,4 @@ file.addEventListener('change',function async (){
 
 
 
-	
 })
