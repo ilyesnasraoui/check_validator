@@ -21,11 +21,147 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins="*",
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+#*************************************************************************************************
+# Python3 program to print a given number in words.
+# The program handles till 9 digits numbers and
+# can be easily extended to 20 digit number
+
+# strings at index 0 is not used, it
+# is to make array indexing simple
+one = ["", "one ", "two ", "three ", "four ",
+       "five ", "six ", "seven ", "eight ",
+       "nine ", "ten ", "eleven ", "twelve ",
+       "thirteen ", "fourteen ", "fifteen ",
+       "sixteen ", "seventeen ", "eighteen ",
+       "nineteen "];
+
+# strings at index 0 and 1 are not used,
+# they is to make array indexing simple
+ten = ["", "", "twenty ", "thirty ", "forty ",
+       "fifty ", "sixty ", "seventy ", "eighty ",
+       "ninety "];
+
+
+# n is 1- or 2-digit number
+def numToWords(n, s):
+    str = "";
+
+    # if n is more than 19, divide it
+    if (n > 19):
+        str += ten[n // 10] + one[n % 10];
+    else:
+        str += one[n];
+        # if n is non-zero
+    if (n):
+        str += s;
+
+    return str;
+
+
+# Function to print a given number in words
+def convertToWords(n):
+    # stores word representation of given
+    # number n
+    out = "";
+
+    # handles digits at ten millions and
+    # hundred millions places (if any)
+    out += numToWords((n // 10000000),
+                      "crore ");
+
+    # handles digits at hundred thousands
+    # and one millions places (if any)
+    out += numToWords(((n // 100000) % 100),
+                      "lakh ");
+
+    # handles digits at thousands and tens
+    # thousands places (if any)
+    out += numToWords(((n // 1000) % 100),
+                      "thousand ");
+
+    # handles digit at hundreds places (if any)
+    out += numToWords(((n // 100) % 10),
+                      "hundred ");
+
+    if (n > 100 and n % 100):
+        out += "and ";
+
+    # handles digits at ones and tens
+    # places (if any)
+    out += numToWords((n % 100), "");
+
+    return out;
+
+
+def parse_int(textnum, numwords={}):
+    # create our default word-lists
+    if not numwords:
+
+        # singles
+        units = [
+            "zero", "one", "two", "three", "four", "five", "six", "seven", "eight",
+            "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+            "sixteen", "seventeen", "eighteen", "nineteen",
+        ]
+
+        # tens
+        tens = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+
+        # larger scales
+        scales = ["hundred", "thousand", "lakh", "core", "billion", "trillion"]
+
+        # divisors
+        numwords["and"] = (1, 0)
+
+        # perform our loops and start the swap
+        for idx, word in enumerate(units):    numwords[word] = (1, idx)
+        for idx, word in enumerate(tens):     numwords[word] = (1, idx * 10)
+        for idx, word in enumerate(scales):   numwords[word] = (10 ** (idx * 2 + 1 or 2), 0)
+
+    # primary loop
+    current = result = 0
+    # loop while splitting to break into individual words
+    for word in textnum.replace("-", " ").split():
+        # if problem then fail-safe
+        if word not in numwords:
+            raise Exception("Illegal word: " + word)
+
+        # use the index by the multiplier
+        scale, increment = numwords[word]
+        current = current * scale + increment
+
+        # if larger than 100 then push for a round 2
+        if scale > 100:
+            result += current
+            current = 0
+
+    # return the result plus the current
+    return result + current
+
+# This code is contributed by mits
+
+
+
+
+#************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
 
 alphabets = u"!\"#&'()*+,-./0123456789:;?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
 max_str_len = 100 # max length of input labels
@@ -156,5 +292,7 @@ async def testt(img: UploadFile=File(...)):
     number = str(var1[1])
     letter = str(var1[0])
 
+    letter =convertToWords(number)
     print(letter)
-    return ({"letter":letter,"number":number})
+    
+    return ({"letter":letter,'number':number})
