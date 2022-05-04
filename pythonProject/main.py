@@ -290,9 +290,11 @@ async def testt(img: UploadFile=File(...)):
 
     var1 = output.split(',')
     number = str(var1[1])
+    number=int(number)
     letter = str(var1[0])
 
     letter =convertToWords(number)
+    number=str(number)
     print(letter)
-    
+
     return ({"letter":letter,'number':number})
